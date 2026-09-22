@@ -1,0 +1,31 @@
+# docker compose up -d
+#
+# Then point any TypeSafe client at http://localhost:8765. The first start
+# downloads the checkpoint (about 850 MB); `docker compose ps` shows the
+# container as healthy once it is listening.
+#
+# For a GPU, add an override:
+#   docker compose -f compose.yaml -f compose.cuda.yaml up -d    NVIDIA
+#   docker compose -f compose.yaml -f compose.rocm.yaml up -d    AMD, Linux host
+
+name: laya-server
+
+services:
+  laya:
+    build: .
+    image: laya-server:cpu
+    ports:
+      # Loopback only. Set LAYA_SERVER_API_KEY before publishing it wider.
+      - "127.0.0.1:${LAYA_SERVER_PORT:-8765}:8765"
+    environment:
+      LAYA_SERVER_MODELS: ${LAYA_SERVER_MODELS:-english}
+      LAYA_SERVER_JEV_ALIAS: ${LAYA_SERVER_JEV_ALIAS:-1}
+      LAYA_SERVER_REJECT_TRUNCATED: ${LAYA_SERVER_REJECT_TRUNCATED:-0}
+      LAYA_SERVER_API_KEY: ${LAYA_SERVER_API_KEY:-}
+      LAYA_SERVER_DEVICE: ${LAYA_SERVER_DEVICE:-}
+    volumes:
+      - models:/data
+    restart: unless-stopped
+
+volumes:
+  models:

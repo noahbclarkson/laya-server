@@ -1,0 +1,21 @@
+version: 2
+updates:
+  - package-ecosystem: pip
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      python:
+        patterns: ["*"]
+  - package-ecosystem: cargo
+    directory: /verify
+    schedule:
+      interval: monthly
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: monthly
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

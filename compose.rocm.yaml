@@ -1,0 +1,21 @@
+# AMD GPU on a Linux host with the amdgpu kernel driver. Docker Desktop on
+# Windows cannot pass /dev/kfd through; see the README for the options there.
+#
+#   RENDER_GID=$(getent group render | cut -d: -f3) \
+#     docker compose -f compose.yaml -f compose.rocm.yaml up -d
+
+services:
+  laya:
+    build:
+      args:
+        TORCH_INDEX: rocm7.2
+    image: laya-server:rocm
+    devices:
+      - /dev/kfd
+      - /dev/dri
+    group_add:
+      - video
+      # The render group's id differs between distributions, so it comes from the host.
+      - "${RENDER_GID:?set RENDER_GID to the host's render group id: getent group render}"
+    security_opt:
+      - seccomp=unconfined

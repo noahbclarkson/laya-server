@@ -1,0 +1,18 @@
+# NVIDIA GPU. Needs the NVIDIA Container Toolkit on Linux, or Docker Desktop
+# with the WSL 2 backend on Windows.
+#
+#   docker compose -f compose.yaml -f compose.cuda.yaml up -d
+
+services:
+  laya:
+    build:
+      args:
+        TORCH_INDEX: cu130
+    image: laya-server:cuda
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
