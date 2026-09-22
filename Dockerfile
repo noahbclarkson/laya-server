@@ -6,7 +6,7 @@
 #
 # The compose files wrap these; see the README.
 
-FROM python:3.13-slim
+FROM python:3.14-slim
 
 # Which of PyTorch's wheel indexes to install from: https://download.pytorch.org/whl/<index>
 ARG TORCH_INDEX=cpu
